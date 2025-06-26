@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Prompt Engineering: An Infographic Guide</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- New: Chart.js Datalabels Plugin CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f9ff;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px; /* Increased from 500px for more legend space */
+            margin-left: auto;
+            margin-right: auto;
+            height: 280px; /* Adjusted from 300px for more legend vertical space */
+            max-height: 380px; /* Adjusted from 400px */
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 330px; /* Adjusted from 350px for more legend space on larger screens */
+            }
+        }
+        .gradient-text {
+            background: linear-gradient(90deg, #00A1E4, #00B8FF);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .flowchart-item {
+            border-left: 3px solid #00B8FF;
+        }
+        .flowchart-item::before {
+            content: '';
+            position: absolute;
+            left: -11px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background-color: #00B8FF;
+            border: 3px solid #f0f9ff;
+        }
+    </style>
+</head>
+<body class="text-gray-800">
+    <div class="container mx-auto p-4 md:p-8 max-w-6xl">
+        
+        <header class="text-center mb-12 md:mb-16">
+            <h1 class="text-4xl md:text-6xl font-black mb-2 gradient-text">Engineer Your Prompts</h1>
+            <p class="text-lg md:text-xl text-gray-600">An Infographic Guide to Advanced AI Interaction for PISD Staff</p>
+        </header>
+
+        <section id="evolution" class="mb-16">
+            <h2 class="text-3xl font-bold text-center mb-8">The Evolution of a Prompt</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-6 rounded-lg shadow-md">
+                    <h3 class="font-bold mb-2 text-xl">BEFORE: Basic Prompt</h3>
+                    <p class="italic">"Give me IEP goals."</p>
+                    <p class="mt-4 text-sm">This vague request leads to generic, often unusable results that require heavy editing and lack specific context.</p>
+                </div>
+                <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-6 rounded-lg shadow-lg">
+                    <h3 class="font-bold mb-2 text-xl">AFTER: Engineered Prompt</h3>
+                    <p class="italic">"[System] You are an expert SLP assistant. [User] Draft 3 SMART IEP goals for a 2nd grader with /r/ articulation errors..."</p>
+                    <p class="mt-4 text-sm">This precise instruction, using roles and context, produces a predictable, high-quality, and actionable draft, saving valuable time.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="roles" class="mb-16">
+            <h2 class="text-3xl font-bold text-center mb-8">Understanding the 3 Core Roles</h2>
+            <p class="text-center max-w-3xl mx-auto mb-10 text-gray-600">Explicitly defining roles gives you greater control over the AI's behavior and output. Think of it as giving the AI a specific job title, a clear set of instructions, and a perfect example to follow.</p>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="bg-white rounded-lg shadow-md p-6 text-center transform hover:scale-105 transition-transform duration-300">
+                    <div class="text-4xl mb-4">⚙️</div>
+                    <h3 class="text-2xl font-bold mb-2 text-[#00A1E4]">System</h3>
+                    <p class="text-gray-600">Sets the AI's foundational persona and global rules for the entire conversation. It's the "operating manual."</p>
+                </div>
+                <div class="bg-white rounded-lg shadow-md p-6 text-center transform hover:scale-105 transition-transform duration-300">
+                    <div class="text-4xl mb-4">👤</div>
+                    <h3 class="text-2xl font-bold mb-2 text-[#00B8FF]">User</h3>
+                    <p class="text-gray-600">Contains your specific query, context, and constraints for the immediate task. It's your direct instruction.</p>
+                </div>
+                <div class="bg-white rounded-lg shadow-md p-6 text-center transform hover:scale-105 transition-transform duration-300">
+                    <div class="text-4xl mb-4">💡</div>
+                    <h3 class="text-2xl font-bold mb-2 text-[#33C7FF]">Assistant</h3>
+                    <p class="text-gray-600">Provides the AI with a perfect example of your desired output, teaching it the format and style you need.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="workflow" class="mb-16">
+            <h2 class="text-3xl font-bold text-center mb-8">The Prompt Engineering Workflow</h2>
+            <p class="text-center max-w-3xl mx-auto mb-10 text-gray-600">Follow these steps to build effective prompts that deliver predictable results every time, moving from a general idea to a specific, high-quality output.</p>
+            <div class="relative pl-8 md:pl-12">
+                <div class="flowchart-item relative pl-8 pb-10">
+                    <h3 class="text-xl font-bold text-[#00A1E4]">Step 1: Set the System</h3>
+                    <p class="text-gray-600">Start by defining the AI's persona and global rules. This is optional but highly recommended for setting a consistent foundation.</p>
+                </div>
+                <div class="flowchart-item relative pl-8 pb-10">
+                    <h3 class="text-xl font-bold text-[#00B8FF]">Step 2: Define the User Request</h3>
+                    <p class="text-gray-600">Clearly state the persona, action, context, and constraints for your specific task. Be as detailed as possible.</p>
+                </div>
+                <div class="flowchart-item relative pl-8 pb-10">
+                    <h3 class="text-xl font-bold text-[#33C7FF]">Step 3: Provide an Example (Optional)</h3>
+                    <p class="text-gray-600">If the format is complex, use the Assistant role to "show" the AI exactly what you want. This is a powerful way to ensure stylistic consistency.</p>
+                </div>
+                <div class="flowchart-item relative pl-8">
+                    <h3 class="text-xl font-bold text-[#66D6FF]">Step 4: Review and Refine</h3>
+                    <p class="text-gray-600">Critically evaluate the output. If it's not perfect, refine your User prompt with more specific keywords or clearer constraints.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="keywords" class="mb-16">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                <div>
+                    <h2 class="text-3xl font-bold mb-4">Keywords: Your AI Control Panel</h2>
+                    <p class="text-gray-600 mb-4">Beyond roles, specific keywords act as powerful directives. By telling the AI exactly how to format, what content to focus on, the desired tone, and the rules to follow, you gain granular control over the final product. This chart shows the categories of keywords available to you.</p>
+                    <p class="text-gray-600">Using keywords like `Format as: table` or `Focus on: antecedent strategies` removes guesswork and ensures the AI's output is structured and focused precisely to your needs, turning it into a more reliable and efficient tool.</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <div class="chart-container">
+                        <canvas id="keywordChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="use-cases" class="mb-16">
+            <h2 class="text-3xl font-bold text-center mb-8">Use Case Spotlight: Measuring Effectiveness</h2>
+            <p class="text-center max-w-3xl mx-auto mb-10 text-gray-600">Applying these principles has a measurable impact. This chart illustrates the dramatic increase in output quality and predictability when moving from a basic, single-sentence prompt to an engineered prompt using roles and keywords for specific staff tasks.</p>
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <div class="chart-container" style="max-width: 800px;">
+                    <canvas id="effectivenessChart"></canvas>
+                </div>
+            </div>
+        </section>
+        
+        <section id="payoff" class="text-center">
+            <h2 class="text-3xl font-bold mb-8">The Payoff: Why This Matters</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="bg-white rounded-lg shadow-md p-8">
+                    <p class="text-6xl font-black gradient-text">90%</p>
+                    <p class="text-xl font-semibold text-gray-700 mt-2">Increased Predictability</p>
+                </div>
+                <div class="bg-white rounded-lg shadow-md p-8">
+                    <p class="text-6xl font-black gradient-text">75%</p>
+                    <p class="text-xl font-semibold text-gray-700 mt-2">Reduced Ambiguity</p>
+                </div>
+                <div class="bg-white rounded-lg shadow-md p-8">
+                    <p class="text-6xl font-black gradient-text">85%</p>
+                    <p class="text-xl font-semibold text-gray-700 mt-2">Higher Quality Drafts</p>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <script>
+        // Function to wrap labels for multiline display
+        function wrapLabels(label, maxLength) {
+            if (typeof label !== 'string' || label.length <= maxLength) {
+                return label;
+            }
+            const words = label.split(' ');
+            const lines = [];
+            let currentLine = '';
+            for (const word of words) {
+                // If adding the next word exceeds max length, push current line and start new
+                if ((currentLine + word).length > maxLength && currentLine.length > 0) {
+                    lines.push(currentLine.trim());
+                    currentLine = word + ' ';
+                } else {
+                    currentLine += word + ' ';
+                }
+            }
+            lines.push(currentLine.trim()); // Push the last line
+            return lines.filter(line => line.length > 0); // Filter out any empty lines
+        }
+
+        // Universal Tooltip Callback for Chart.js
+        const universalTooltipCallback = {
+            title: function(tooltipItems) {
+                const item = tooltipItems[0];
+                let label = item.chart.data.labels[item.dataIndex];
+                if (Array.isArray(label)) {
+                    return label.join(' '); // Join array elements with a space for tooltip title
+                }
+                return label;
+            }
+        };
+
+        // Register the datalabels plugin globally
+        Chart.register(ChartDataLabels);
+        
+        const keywordData = {
+            labels: ['Formatting & Structure', 'Content & Detail', 'Tone & Style', 'Constraints & Rules'].map(l => wrapLabels(l, 10)), // Shorter wrap for inner labels
+            datasets: [{
+                label: 'Keyword Categories',
+                data: [6, 6, 4, 4],
+                backgroundColor: [
+                    '#00A1E4',
+                    '#00B8FF',
+                    '#33C7FF',
+                    '#66D6FF'
+                ],
+                borderColor: '#f0f9ff',
+                borderWidth: 4,
+                hoverOffset: 4
+            }]
+        };
+
+        const keywordCtx = document.getElementById('keywordChart').getContext('2d');
+        new Chart(keywordCtx, {
+            type: 'doughnut',
+            data: keywordData,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false // Hide the external legend
+                    },
+                    tooltip: {
+                        callbacks: universalTooltipCallback
+                    },
+                    datalabels: { // Configuration for datalabels plugin
+                        color: '#fff', // White color for labels
+                        textAlign: 'center',
+                        font: {
+                            weight: 'bold',
+                            size: 13,
+                            family: 'Inter',
+                        },
+                        formatter: (value, context) => {
+                            // Get the raw label (could be array or string)
+                            const label = context.chart.data.labels[context.dataIndex];
+                            // If it's an array, join it with newlines for display
+                            return Array.isArray(label) ? label.join('\n') : label;
+                        },
+                        anchor: 'center', // Position labels in the center of the arc
+                        align: 'center', // Align text centrally within the anchor
+                    }
+                }
+            }
+        });
+
+        const effectivenessData = {
+            labels: ['SLP: Goal Drafting', 'BIS: Staff Training Materials'].map(l => wrapLabels(l, 16)),
+            datasets: [{
+                label: 'Basic Prompt',
+                data: [35, 30],
+                backgroundColor: '#99E5FF',
+                borderColor: '#66D6FF',
+                borderWidth: 1,
+                borderRadius: 5
+            }, {
+                label: 'Engineered Prompt',
+                data: [90, 85],
+                backgroundColor: '#00A1E4',
+                borderColor: '#00A1E4',
+                borderWidth: 1,
+                borderRadius: 5
+            }]
+        };
+        
+        const effectivenessCtx = document.getElementById('effectivenessChart').getContext('2d');
+        new Chart(effectivenessCtx, {
+            type: 'bar',
+            data: effectivenessData,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 100,
+                        ticks: {
+                           callback: function(value) {
+                               return value + '%'
+                           },
+                           font: { family: 'Inter' }
+                        },
+                        title: {
+                            display: true,
+                            text: 'Output Quality & Predictability',
+                            font: { family: 'Inter', weight: 'bold' }
+                        }
+                    },
+                    x: {
+                         ticks: { font: { family: 'Inter' } }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        position: 'top',
+                        labels: { font: { family: 'Inter', size: 14 } }
+                    },
+                    tooltip: {
+                        callbacks: universalTooltipCallback
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
