@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Guide: AI for Special Educators</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Calm Harmony (Warm Neutrals) -->
+    <!-- Application Structure Plan: A guided, thematic single-page application. The structure uses a top navigation bar for easy access to key sections: 1. A hero section establishing the core 'Human-AI-Human' model. 2. An interactive tabbed section for the four core domains (IEPs, BIPs, etc.) allowing focused exploration. 3. A visual, step-by-step demonstration of the 'Prompt Chaining' workflow. 4. A dedicated 'Ethics & Responsibility' hub with clear visual guides. 5. An 'Implementation & Resources' section with an interactive checklist and resource links. This non-linear, thematic structure was chosen over a simple slide-by-slide format to empower busy teachers to quickly access the information most relevant to their needs, which is a key principle for effective adult learning. -->
+    <!-- Visualization & Content Choices: 
+        - Report Info: Pre-session poll data (from speaker notes). Goal: Compare & Engage. Viz: Chart.js Donut Chart. Interaction: Hover. Justification: More engaging than text, builds community by showing shared perspectives.
+        - Report Info: H-AI-H Model. Goal: Inform. Viz: HTML/CSS Diagram. Interaction: Hover states. Justification: A simple, clear visual to establish the core principle upfront.
+        - Report Info: Four Core Domains. Goal: Organize & Inform. Viz: Tabbed Interface. Interaction: Click to reveal content. Justification: Prevents information overload and allows self-directed exploration.
+        - Report Info: De-identification Process. Goal: Emphasize & Instruct. Viz: "Before/After" HTML tables. Interaction: Static visual highlights. Justification: Clearly demonstrates the critical process with strong visual cues.
+        - Report Info: 30-Day Plan. Goal: Action. Viz: Interactive HTML checklist. Interaction: Clickable checkboxes. Justification: Makes the plan feel more personal and actionable.
+        - Report Info: Quiz. Goal: Assess. Viz: JS-powered interactive quiz. Interaction: Click to answer, immediate feedback. Justification: Self-paced knowledge check.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F5F5F4; /* stone-100 */
+        }
+        .nav-link {
+            transition: color 0.3s ease, border-bottom-color 0.3s ease;
+            border-bottom: 2px solid transparent;
+        }
+        .nav-link:hover, .nav-link.active {
+            color: #14532D; /* green-900 */
+            border-bottom-color: #14532D; /* green-900 */
+        }
+        .tab.active {
+            background-color: #14532D; /* green-900 */
+            color: white;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .chart-container {
+            position: relative; 
+            width: 100%; 
+            max-width: 400px; 
+            margin-left: auto; 
+            margin-right: auto; 
+            height: auto;
+            min-height: 300px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                min-height: 400px;
+            }
+        }
+        .flow-step:hover .flow-icon {
+            transform: scale(1.1);
+            background-color: #DCFCE7; /* green-100 */
+        }
+        .flow-icon {
+            transition: transform 0.3s ease, background-color 0.3s ease;
+        }
+        .quiz-option {
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+        .quiz-option.correct {
+            background-color: #DCFCE7; /* green-100 */
+            border-color: #22C55E; /* green-500 */
+        }
+        .quiz-option.incorrect {
+            background-color: #FEE2E2; /* red-100 */
+            border-color: #EF4444; /* red-500 */
+        }
+        .checklist-item input:checked + label span {
+            text-decoration: line-through;
+            color: #6B7280; /* gray-500 */
+        }
+    </style>
+</head>
+<body class="text-stone-800">
+
+    <!-- Header & Navigation -->
+    <header class="bg-stone-50/80 backdrop-blur-sm sticky top-0 z-50 shadow-sm">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center">
+                    <span class="font-bold text-lg text-green-900">AI for SPED</span>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-4">
+                        <a href="#introduction" class="nav-link px-3 py-2 rounded-md text-sm font-medium">Introduction</a>
+                        <a href="#domains" class="nav-link px-3 py-2 rounded-md text-sm font-medium">Core Domains</a>
+                        <a href="#workflow" class="nav-link px-3 py-2 rounded-md text-sm font-medium">Workflow</a>
+                        <a href="#ethics" class="nav-link px-3 py-2 rounded-md text-sm font-medium">Ethics</a>
+                        <a href="#plan" class="nav-link px-3 py-2 rounded-md text-sm font-medium">Your Plan</a>
+                        <a href="#resources" class="nav-link px-3 py-2 rounded-md text-sm font-medium">Resources</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+
+        <!-- Section 1: Introduction -->
+        <section id="introduction" class="text-center py-16">
+            <h1 class="text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl md:text-6xl">The AI-Powered Partner for <span class="text-green-800">Special Educators</span></h1>
+            <p class="mt-6 max-w-2xl mx-auto text-lg leading-8 text-gray-600">This guide provides a practical, hands-on framework for using Google's NotebookLM to save time, enhance documentation, and free you up to focus on what matters most: your students.</p>
+            
+            <div class="mt-12">
+                <h2 class="text-2xl font-bold text-gray-900 mb-2">The Guiding Principle: Human-AI-Human (H-AI-H)</h2>
+                <p class="max-w-3xl mx-auto text-gray-600 mb-8">This model ensures you, the professional, are always in control. The AI is a co-pilot, not the pilot.</p>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+                    <div class="flow-step p-6 bg-white rounded-xl shadow-md">
+                        <div class="flow-icon w-20 h-20 mx-auto bg-green-50 rounded-full flex items-center justify-center text-4xl">🧑‍🏫</div>
+                        <h3 class="mt-4 text-lg font-semibold">1. Human Input</h3>
+                        <p class="mt-2 text-sm text-gray-600">You identify a need and provide the de-identified data and context. (e.g., "Draft an IEP goal based on this data.")</p>
+                    </div>
+                    <div class="flex items-center justify-center text-4xl text-gray-400 font-mono hidden md:flex">→</div>
+                    <div class="flow-step p-6 bg-white rounded-xl shadow-md">
+                        <div class="flow-icon w-20 h-20 mx-auto bg-green-50 rounded-full flex items-center justify-center text-4xl">🤖</div>
+                        <h3 class="mt-4 text-lg font-semibold">2. AI Assist</h3>
+                        <p class="mt-2 text-sm text-gray-600">NotebookLM analyzes your sources to generate a draft, summary, or list of ideas.</p>
+                    </div>
+                    <div class="flex items-center justify-center text-4xl text-gray-400 font-mono hidden md:flex">→</div>
+                    <div class="flow-step p-6 bg-white rounded-xl shadow-md">
+                        <div class="flow-icon w-20 h-20 mx-auto bg-green-50 rounded-full flex items-center justify-center text-4xl">✍️</div>
+                        <h3 class="mt-4 text-lg font-semibold">3. Human Refinement</h3>
+                        <p class="mt-2 text-sm text-gray-600">You review, edit, and apply your professional judgment to finalize the work.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="my-16 border-t border-stone-200"></div>
+
+        <!-- Section 2: Core Domains -->
+        <section id="domains" class="py-16">
+            <div class="text-center">
+                <h2 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">Explore the Core Domains</h2>
+                <p class="mt-4 max-w-2xl mx-auto text-lg text-gray-600">Explore the four key areas where NotebookLM can transform your workflow. Click each domain to see a common challenge and a sample prompt to solve it.</p>
+            </div>
+
+            <div class="mt-12">
+                <div class="block">
+                    <div class="border-b border-gray-200">
+                        <nav class="-mb-px flex space-x-4 justify-center" aria-label="Tabs">
+                            <button id="tab-iep" class="tab active whitespace-nowrap py-4 px-6 border-b-2 font-medium text-sm rounded-t-lg">IEP Documentation</button>
+                            <button id="tab-bip" class="tab whitespace-nowrap py-4 px-6 border-b-2 font-medium text-sm rounded-t-lg">BIP Support</button>
+                            <button id="tab-admin" class="tab whitespace-nowrap py-4 px-6 border-b-2 font-medium text-sm rounded-t-lg">Admin Efficiency</button>
+                            <button id="tab-diff" class="tab whitespace-nowrap py-4 px-6 border-b-2 font-medium text-sm rounded-t-lg">Differentiation</button>
+                        </nav>
+                    </div>
+                </div>
+
+                <div class="mt-8 bg-white p-8 rounded-xl shadow-md">
+                    <!-- IEP Content -->
+                    <div id="content-iep" class="tab-content active">
+                        <h3 class="text-2xl font-bold text-gray-900">From Data Overload to Defensible Drafts</h3>
+                        <p class="mt-2 text-gray-600"><strong class="font-semibold text-gray-800">The Challenge:</strong> Synthesizing assessment data and observations into a compliant "Present Levels" (PLOP) section.</p>
+                        <div class="mt-6 bg-stone-50 p-4 rounded-lg">
+                            <p class="font-mono text-sm text-gray-700">
+                                <span class="font-semibold text-green-800">AI Assist Prompt:</span><br>
+                                "Summarize the key findings from these sources for a 4th-grade student's reading fluency and comprehension. Highlight areas of strength and need."
+                            </p>
+                        </div>
+                    </div>
+                    <!-- BIP Content -->
+                    <div id="content-bip" class="tab-content">
+                        <h3 class="text-2xl font-bold text-gray-900">Connecting Dots for Positive Interventions</h3>
+                        <p class="mt-2 text-gray-600"><strong class="font-semibold text-gray-800">The Challenge:</strong> Translating FBA data into function-based, positive replacement behaviors and strategies.</p>
+                        <div class="mt-6 bg-stone-50 p-4 rounded-lg">
+                            <p class="font-mono text-sm text-gray-700">
+                                <span class="font-semibold text-green-800">AI Assist Prompt:</span><br>
+                                "Based on the attached FBA which identifies the function of behavior as escape from non-preferred tasks, generate a list of 5 potential replacement behaviors and 5 antecedent strategies."
+                            </p>
+                        </div>
+                    </div>
+                    <!-- Admin Content -->
+                    <div id="content-admin" class="tab-content">
+                        <h3 class="text-2xl font-bold text-gray-900">From Parent Emails to Meeting Summaries</h3>
+                        <p class="mt-2 text-gray-600"><strong class="font-semibold text-gray-800">The Challenge:</strong> Spending hours on routine communication and administrative tasks.</p>
+                        <div class="mt-6 bg-stone-50 p-4 rounded-lg">
+                           <p class="font-mono text-sm text-gray-700">
+                                <span class="font-semibold text-green-800">AI Assist Prompt:</span><br>
+                                "Based on the IEP goals source, draft a professional, positive email to a parent summarizing their child's progress in Q2."
+                            </p>
+                        </div>
+                    </div>
+                    <!-- Differentiation Content -->
+                    <div id="content-diff" class="tab-content">
+                        <h3 class="text-2xl font-bold text-gray-900">From One Lesson to Many Paths</h3>
+                        <p class="mt-2 text-gray-600"><strong class="font-semibold text-gray-800">The Challenge:</strong> Quickly creating materials for a wide range of academic and social-emotional needs.</p>
+                        <div class="mt-6 bg-stone-50 p-4 rounded-lg">
+                            <p class="font-mono text-sm text-gray-700">
+                                <span class="font-semibold text-green-800">AI Assist Prompt:</span><br>
+                                "Using the attached science text on photosynthesis, create a vocabulary list with simple definitions for a 3rd-grade level. Then, suggest 3 hands-on activities to reinforce the concepts."
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="my-16 border-t border-stone-200"></div>
+
+        <!-- Section 3: Workflow -->
+        <section id="workflow" class="py-16">
+            <div class="text-center">
+                <h2 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">Workflow in Action: Prompt Chaining</h2>
+                <p class="mt-4 max-w-2xl mx-auto text-lg text-gray-600">Prompt chaining is using the output from one prompt to build the next. This creates a powerful, multi-step workflow where you guide the AI from raw data to a finished product.</p>
+            </div>
+            <div class="mt-12 grid grid-cols-1 md:grid-cols-5 gap-4 items-center">
+                <div class="p-6 bg-white rounded-xl shadow-md text-center">
+                    <h3 class="font-bold text-lg text-gray-900">Step 1: Summarize</h3>
+                    <p class="text-sm text-gray-600 mt-2">Analyze a de-identified FBA to extract key patterns and functions.</p>
+                </div>
+                <div class="text-center text-2xl text-gray-400 font-bold">→</div>
+                <div class="p-6 bg-white rounded-xl shadow-md text-center">
+                    <h3 class="font-bold text-lg text-gray-900">Step 2: Strategize</h3>
+                    <p class="text-sm text-gray-600 mt-2">Use the summary to draft relevant, function-based BIP goals.</p>
+                </div>
+                <div class="text-center text-2xl text-gray-400 font-bold">→</div>
+                 <div class="p-6 bg-white rounded-xl shadow-md text-center">
+                    <h3 class="font-bold text-lg text-gray-900">Step 3: Communicate</h3>
+                    <p class="text-sm text-gray-600 mt-2">Use the drafted goals to compose a clear, empathetic parent email.</p>
+                </div>
+            </div>
+        </section>
+
+        <div class="my-16 border-t border-stone-200"></div>
+        
+        <!-- Section 4: Ethics -->
+        <section id="ethics" class="py-16">
+            <div class="text-center">
+                <h2 class="text-3xl font-bold tracking-tight text-red-800 sm:text-4xl">Ethics & Responsibility: Your Human Guardrails</h2>
+                <p class="mt-4 max-w-2xl mx-auto text-lg text-gray-600">Using AI ethically is paramount. Your professional judgment and commitment to student privacy are non-negotiable.</p>
+            </div>
+
+            <div class="mt-12 grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div class="bg-white p-8 rounded-xl shadow-md">
+                    <h3 class="text-2xl font-bold text-gray-900">De-Identification is Mandatory</h3>
+                    <p class="mt-2 text-gray-600">You must <strong class="text-red-700">NEVER</strong> upload Personally Identifiable Information (PII). Remove all identifying data before uploading any document.</p>
+                    <div class="mt-4 grid grid-cols-2 gap-4 text-sm">
+                        <div class="bg-red-50 p-4 rounded-lg">
+                            <h4 class="font-bold text-red-800">BEFORE</h4>
+                            <p class="mt-2 font-mono text-red-900">Report for <span class="bg-red-200 px-1">John Doe</span>, DOB <span class="bg-red-200 px-1">5/15/2015</span>. FBA conducted by <span class="bg-red-200 px-1">Ms. Smith</span>.</p>
+                        </div>
+                        <div class="bg-green-50 p-4 rounded-lg">
+                            <h4 class="font-bold text-green-800">AFTER</h4>
+                            <p class="mt-2 font-mono text-green-900">Report for <span class="bg-green-200 px-1">[Student]</span>, DOB <span class="bg-green-200 px-1">[DOB]</span>. FBA conducted by <span class="bg-green-200 px-1">[Teacher]</span>.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white p-8 rounded-xl shadow-md">
+                     <h3 class="text-2xl font-bold text-gray-900">Core Ethical Principles</h3>
+                     <ul class="mt-4 space-y-4 text-gray-700">
+                        <li class="flex items-start">
+                            <span class="text-green-600 mr-3 mt-1">✓</span>
+                            <span><strong class="font-semibold">You are the Expert:</strong> AI is a tool, not a replacement for your professional judgment.</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-green-600 mr-3 mt-1">✓</span>
+                            <span><strong class="font-semibold">Combat Bias:</strong> Question and verify AI output. Ensure it's culturally responsive and appropriate for your student.</span>
+                        </li>
+                        <li class="flex items-start">
+                             <span class="text-green-600 mr-3 mt-1">✓</span>
+                            <span><strong class="font-semibold">Maintain Originality:</strong> Use AI as a starting point. Always revise in your own expert voice to avoid impersonal documents.</span>
+                        </li>
+                     </ul>
+                </div>
+            </div>
+             <div class="mt-12">
+                 <h3 class="text-center text-2xl font-bold text-gray-900">Knowledge Check</h3>
+                 <div id="quiz-container" class="mt-6 max-w-2xl mx-auto space-y-4">
+                     <!-- Question 1 -->
+                     <div class="bg-white p-4 rounded-lg shadow-sm">
+                         <p class="font-semibold">1. What is the most critical first step before uploading a document to NotebookLM?</p>
+                         <div class="mt-2 space-y-2">
+                            <button data-quiz="1" data-correct="false" class="quiz-option w-full text-left p-2 border rounded-md">Copying the text directly from the source file.</button>
+                            <button data-quiz="1" data-correct="true" class="quiz-option w-full text-left p-2 border rounded-md">De-identifying all Personally Identifiable Information (PII).</button>
+                            <button data-quiz="1" data-correct="false" class="quiz-option w-full text-left p-2 border rounded-md">Asking the student for permission.</button>
+                         </div>
+                     </div>
+                     <!-- Question 2 -->
+                     <div class="bg-white p-4 rounded-lg shadow-sm">
+                         <p class="font-semibold">2. The Human-AI-Human model means:</p>
+                         <div class="mt-2 space-y-2">
+                             <button data-quiz="2" data-correct="true" class="quiz-option w-full text-left p-2 border rounded-md">The human expert is always in control, making final decisions.</button>
+                             <button data-quiz="2" data-correct="false" class="quiz-option w-full text-left p-2 border rounded-md">The AI should be trusted to produce the final, official document.</button>
+                             <button data-quiz="2" data-correct="false" class="quiz-option w-full text-left p-2 border rounded-md">Humans and AI are equal partners in the process.</button>
+                         </div>
+                     </div>
+                 </div>
+            </div>
+        </section>
+
+        <div class="my-16 border-t border-stone-200"></div>
+
+        <!-- Section 5: Your Plan -->
+        <section id="plan" class="py-16">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div>
+                    <h2 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">Your 30-Day Implementation Plan</h2>
+                    <p class="mt-4 text-lg text-gray-600">Use this plan to build your skills gradually and safely. Start in a "sandbox" with dummy documents before moving to your core work.</p>
+                     <div class="mt-8 space-y-4">
+                        <div class="checklist-item relative flex items-start">
+                            <div class="flex h-6 items-center"><input id="week1" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-green-600 focus:ring-green-600"></div>
+                            <div class="ml-3 text-sm leading-6"><label for="week1" class="font-medium text-gray-900"><span><strong>Week 1: Sandbox.</strong> Use the starter kit. Practice summarizing and asking questions.</span></label></div>
+                        </div>
+                        <div class="checklist-item relative flex items-start">
+                            <div class="flex h-6 items-center"><input id="week2" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-green-600 focus:ring-green-600"></div>
+                            <div class="ml-3 text-sm leading-6"><label for="week2" class="font-medium text-gray-900"><span><strong>Week 2: Low-Stakes.</strong> Try it on one low-risk task, like drafting an internal report.</span></label></div>
+                        </div>
+                        <div class="checklist-item relative flex items-start">
+                            <div class="flex h-6 items-center"><input id="week3" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-green-600 focus:ring-green-600"></div>
+                            <div class="ml-3 text-sm leading-6"><label for="week3" class="font-medium text-gray-900"><span><strong>Week 3: Core Task.</strong> Pick one core task (an email, a lesson plan) and use the H-AI-H model.</span></label></div>
+                        </div>
+                        <div class="checklist-item relative flex items-start">
+                            <div class="flex h-6 items-center"><input id="week4" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-green-600 focus:ring-green-600"></div>
+                            <div class="ml-3 text-sm leading-6"><label for="week4" class="font-medium text-gray-900"><span><strong>Week 4: Reflect & Share.</strong> What worked? Share one success with a trusted colleague.</span></label></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex flex-col items-center">
+                    <h3 class="text-xl font-semibold text-center mb-4">Your Colleagues' Feelings on AI</h3>
+                    <div class="chart-container">
+                        <canvas id="feelingsChart"></canvas>
+                    </div>
+                     <p class="text-center text-sm text-gray-500 mt-4">Based on a pre-session poll, showing a mix of excitement and caution.</p>
+                </div>
+            </div>
+        </section>
+
+        <div class="my-16 border-t border-stone-200"></div>
+        
+        <!-- Section 6: Resources -->
+        <section id="resources" class="py-16 text-center">
+             <h2 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">Downloadable Resources</h2>
+             <p class="mt-4 max-w-2xl mx-auto text-lg text-gray-600">Get everything you need to start confidently. These guides and kits provide a foundation for your journey with NotebookLM.</p>
+             <div class="mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                 <a href="#" class="resource-card block bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow">
+                    <h3 class="font-bold text-lg text-green-800">Quick Start Guide</h3>
+                    <p class="mt-2 text-sm text-gray-600">A 1-page visual guide to creating notebooks and adding sources.</p>
+                 </a>
+                 <a href="#" class="resource-card block bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow">
+                    <h3 class="font-bold text-lg text-green-800">Prompting Guide</h3>
+                    <p class="mt-2 text-sm text-gray-600">Learn the anatomy of a great prompt and how to refine your requests.</p>
+                 </a>
+                 <a href="#" class="resource-card block bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow">
+                    <h3 class="font-bold text-lg text-red-800">De-Identification Sheet</h3>
+                    <p class="mt-2 text-sm text-gray-600">A critical checklist for protecting student privacy (FERPA).</p>
+                 </a>
+                 <a href="#" class="resource-card block bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow">
+                    <h3 class="font-bold text-lg text-green-800">Prompt Library</h3>
+                    <p class="mt-2 text-sm text-gray-600">A collection of ready-to-use prompts for common SPED tasks.</p>
+                 </a>
+                 <a href="#" class="resource-card block bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow">
+                    <h3 class="font-bold text-lg text-green-800">Sandbox Starter Kit</h3>
+                    <p class="mt-2 text-sm text-gray-600">Fabricated documents to practice with safely.</p>
+                 </a>
+                  <a href="#" class="resource-card block bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow">
+                    <h3 class="font-bold text-lg text-green-800">30-Day Action Plan</h3>
+                    <p class="mt-2 text-sm text-gray-600">A printable version of your implementation plan.</p>
+                 </a>
+             </div>
+        </section>
+
+    </main>
+    
+    <footer class="bg-stone-800 text-stone-300">
+        <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 text-center text-sm">
+            <p>This interactive guide is for professional development purposes. Always adhere to your district's policies on AI use and student data privacy.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Tab functionality
+            const tabs = document.querySelectorAll('.tab');
+            const tabContents = document.querySelectorAll('.tab-content');
+
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    const targetId = 'content-' + tab.id.split('-')[1];
+
+                    tabs.forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+
+                    tabContents.forEach(content => {
+                        content.classList.remove('active');
+                        if (content.id === targetId) {
+                            content.classList.add('active');
+                        }
+                    });
+                });
+            });
+            
+            // Chart.js implementation
+            const ctx = document.getElementById('feelingsChart').getContext('2d');
+            const feelingsChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Excited', 'Cautiously Optimistic', 'Skeptical', 'Unsure'],
+                    datasets: [{
+                        label: 'Feelings on AI',
+                        data: [35, 45, 15, 5], // Example data based on speaker notes
+                        backgroundColor: [
+                            'rgba(34, 197, 94, 0.7)', // green-500
+                            'rgba(130, 200, 150, 0.7)', // a softer green
+                            'rgba(249, 115, 22, 0.7)', // orange-500
+                            'rgba(107, 114, 128, 0.7)' // gray-500
+                        ],
+                        borderColor: [
+                            'rgba(34, 197, 94, 1)',
+                            'rgba(130, 200, 150, 1)',
+                            'rgba(249, 115, 22, 1)',
+                            'rgba(107, 114, 128, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.parsed !== null) {
+                                        label += context.parsed + '%';
+                                    }
+                                    return label;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Nav link active state on scroll
+            const sections = document.querySelectorAll('section');
+            const navLinks = document.querySelectorAll('.nav-link');
+            
+            window.addEventListener('scroll', () => {
+                let current = '';
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    if (pageYOffset >= sectionTop - 80) { // 80 is header height + buffer
+                        current = section.getAttribute('id');
+                    }
+                });
+
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href').includes(current)) {
+                        link.classList.add('active');
+                    }
+                });
+            });
+
+            // Quiz functionality
+            const quizOptions = document.querySelectorAll('.quiz-option');
+            quizOptions.forEach(option => {
+                option.addEventListener('click', () => {
+                    const quizNum = option.dataset.quiz;
+                    const isCorrect = option.dataset.correct === 'true';
+
+                    // Disable all buttons for this question
+                    document.querySelectorAll(`[data-quiz="${quizNum}"]`).forEach(btn => {
+                        btn.disabled = true;
+                    });
+                    
+                    if(isCorrect) {
+                        option.classList.add('correct');
+                    } else {
+                        option.classList.add('incorrect');
+                        // Highlight the correct answer
+                        document.querySelector(`[data-quiz="${quizNum}"][data-correct="true"]`).classList.add('correct');
+                    }
+                });
+            });
+
+        });
+    </script>
+</body>
+</html>
